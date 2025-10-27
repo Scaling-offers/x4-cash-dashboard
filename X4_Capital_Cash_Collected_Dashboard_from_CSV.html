@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>X4 Capital Cash Collected Dashboard (Jan–Jun 2025)</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: #111827;
+    --muted: #9ca3af;
+    --text: #e5e7eb;
+    --accent: #22c55e;
+    --accent-2: #60a5fa;
+    --border: #1f2937;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    background: linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+    color: var(--text);
+  }
+  .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+  .header { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: .3px; color: #f8fafc; }
+  .controls { display:flex; gap:12px; align-items:center; }
+  select, input[type="search"] {
+    background:#0b1220;
+    color:var(--text);
+    border:1px solid var(--border);
+    padding:10px 12px;
+    border-radius:10px;
+    outline:none;
+  }
+  select:hover, input[type="search"]:hover { border-color:#2a3344; }
+  .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:16px; margin-top: 20px; }
+  .card {
+    background: radial-gradient(120% 120% at 100% 0%, #0b1220 0%, var(--card) 60%);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+  }
+  .label { color: var(--muted); font-size: 12px; letter-spacing:.4px; text-transform: uppercase; }
+  .value { font-size: 28px; font-weight: 700; margin-top: 6px; }
+  .badge { display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#0b1220; border:1px solid var(--border); color:var(--muted); }
+  table {
+    width:100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;
+    border:1px solid var(--border); overflow:hidden; border-radius:14px;
+  }
+  thead th {
+    text-align:left; padding:12px; background:#0b1220; color:#cbd5e1; border-bottom:1px solid var(--border);
+    position: sticky; top: 0;
+  }
+  tbody td { padding:12px; border-bottom:1px solid var(--border); }
+  tbody tr:hover { background:#0b1220; }
+  .right { text-align:right; }
+  .searchbox { flex:1; min-width: 220px; }
+  .footer { margin:24px 0 10px; color:var(--muted); font-size:12px; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>X4 Capital Cash Collected Dashboard <span class="badge">Jan 8 – Jun 13, 2025</span></h1>
+      <div class="controls">
+        <input id="search" class="searchbox" type="search" placeholder="Search customers or products..." />
+        <select id="monthSelect" aria-label="Select month">
+          <option value="">Overview (All)</option>
+          <option value="1">January 2025</option>
+          <option value="2">February 2025</option>
+          <option value="3">March 2025</option>
+          <option value="4">April 2025</option>
+          <option value="5">May 2025</option>
+          <option value="6">June 2025</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="label">Total Customers</div>
+        <div id="totalCustomers" class="value">258</div>
+      </div>
+      <div class="card">
+        <div class="label">Total Cash Collected</div>
+        <div id="totalCash" class="value">$1,371,000.00</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <div class="label" style="display:flex; align-items:center; justify-content:space-between;">
+        <span id="tableTitle">All Transactions</span>
+        <span id="tableSummary" class="badge"></span>
+      </div>
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>DATE</th>
+            <th>CUSTOMER</th>
+            <th>PRODUCT</th>
+            <th class="right">TOTAL RECEIVED</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="footer">Use the month dropdown to filter. The overview totals update with your selection.</div>
+  </div>
+
+<script>
+  const DATA = [{"DATE": "1/8/2025", "CUSTOMER": "Jeffery Castillo", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "1/9/2025", "CUSTOMER": "Kevin Atkinson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/9/2025", "CUSTOMER": "Scott Rivera MD", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/9/2025", "CUSTOMER": "Jeremiah Carter", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "1/10/2025", "CUSTOMER": "Ryan White", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "1/12/2025", "CUSTOMER": "Michelle Smith", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "1/12/2025", "CUSTOMER": "Shawn Valentine", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "1/12/2025", "CUSTOMER": "Jennifer Weaver", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/13/2025", "CUSTOMER": "Michael Hughes", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/14/2025", "CUSTOMER": "Anthony Hernandez", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "1/15/2025", "CUSTOMER": "Bethany Guerrero", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/15/2025", "CUSTOMER": "Robin Rose", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/15/2025", "CUSTOMER": "Timothy Fitzpatrick", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "1/18/2025", "CUSTOMER": "Melissa Morales", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "1/19/2025", "CUSTOMER": "Marc Harvey", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/21/2025", "CUSTOMER": "Teresa Flynn", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/21/2025", "CUSTOMER": "Courtney Robbins MD", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/22/2025", "CUSTOMER": "Sarah Morris", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/22/2025", "CUSTOMER": "Amanda Acevedo", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "1/24/2025", "CUSTOMER": "Alexis Garcia", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/26/2025", "CUSTOMER": "Ashley Rios", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "1/27/2025", "CUSTOMER": "Ryan Stephens", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/28/2025", "CUSTOMER": "Arthur Stafford", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "1/28/2025", "CUSTOMER": "Aaron Hogan", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "1/29/2025", "CUSTOMER": "Sheila Shaw", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "2/3/2025", "CUSTOMER": "Terry Munoz", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/3/2025", "CUSTOMER": "Nicole Watkins", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "2/4/2025", "CUSTOMER": "Maria Williams", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/5/2025", "CUSTOMER": "Stephanie Alvarez", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/6/2025", "CUSTOMER": "Ms. Patricia Hill", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "2/8/2025", "CUSTOMER": "Amanda Bell", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/10/2025", "CUSTOMER": "Adam Hardy", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/10/2025", "CUSTOMER": "Danny Garrison", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "2/12/2025", "CUSTOMER": "David Davis", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "2/13/2025", "CUSTOMER": "Anthony Roy", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/16/2025", "CUSTOMER": "Joanna Boyle", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/18/2025", "CUSTOMER": "Tiffany Ryan", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/19/2025", "CUSTOMER": "Jeffrey Graves", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/20/2025", "CUSTOMER": "Nancy Wilson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/20/2025", "CUSTOMER": "Zachary Gill", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "2/23/2025", "CUSTOMER": "Scott Gonzalez", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/24/2025", "CUSTOMER": "George Sullivan", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "2/25/2025", "CUSTOMER": "Paul Davis", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "2/26/2025", "CUSTOMER": "Jared Rogers", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/1/2025", "CUSTOMER": "John Hatfield", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/3/2025", "CUSTOMER": "Kathleen Maddox", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/3/2025", "CUSTOMER": "Paul Mccormick", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/3/2025", "CUSTOMER": "George Turner", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/4/2025", "CUSTOMER": "Dawn Frazier", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/4/2025", "CUSTOMER": "Tracy Taylor", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/5/2025", "CUSTOMER": "Cassandra Hernandez", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/5/2025", "CUSTOMER": "Samuel Cooper", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/6/2025", "CUSTOMER": "Sabrina Parker", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "3/8/2025", "CUSTOMER": "Kelly Smith", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "3/9/2025", "CUSTOMER": "Luis Sanchez", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/10/2025", "CUSTOMER": "Lindsey Lane", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/11/2025", "CUSTOMER": "Beverly Matthews", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/11/2025", "CUSTOMER": "Eric Bean", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "3/12/2025", "CUSTOMER": "Jack Hamilton", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/12/2025", "CUSTOMER": "Michael Hill", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/16/2025", "CUSTOMER": "Jeremy Miller", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/16/2025", "CUSTOMER": "Amanda Hess", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/18/2025", "CUSTOMER": "Debbie Davila", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "3/19/2025", "CUSTOMER": "Kim Bryant", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/20/2025", "CUSTOMER": "Steven Lee", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "3/21/2025", "CUSTOMER": "Glen Campbell", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "3/21/2025", "CUSTOMER": "Kevin Turner", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "3/21/2025", "CUSTOMER": "Megan Wright", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/21/2025", "CUSTOMER": "Jason Cameron", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/23/2025", "CUSTOMER": "Andres Garner", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/24/2025", "CUSTOMER": "Michelle Schultz", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "3/24/2025", "CUSTOMER": "Matthew Pitts", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "3/24/2025", "CUSTOMER": "Michelle Deleon", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "3/25/2025", "CUSTOMER": "Ray Hancock", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "3/26/2025", "CUSTOMER": "Carla Lane", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/27/2025", "CUSTOMER": "Melody Moore", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/27/2025", "CUSTOMER": "George Phillips", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "3/27/2025", "CUSTOMER": "Michael Ruiz", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "3/28/2025", "CUSTOMER": "Devin Rose", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "3/29/2025", "CUSTOMER": "Meghan Hall", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "3/29/2025", "CUSTOMER": "Amber Murray", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "3/30/2025", "CUSTOMER": "Charles Jimenez", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/1/2025", "CUSTOMER": "Christine Jenkins", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/1/2025", "CUSTOMER": "Marie Moreno", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "4/2/2025", "CUSTOMER": "Angie Thomas", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/2/2025", "CUSTOMER": "Alexis Brown", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/2/2025", "CUSTOMER": "Shawn Snyder", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "4/3/2025", "CUSTOMER": "Barbara Gray", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/5/2025", "CUSTOMER": "Amy Martin", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/5/2025", "CUSTOMER": "Alec Walker", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/5/2025", "CUSTOMER": "Matthew Perry", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/6/2025", "CUSTOMER": "Karen Thompson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/6/2025", "CUSTOMER": "Alvin Green", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/8/2025", "CUSTOMER": "John Stevens", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/8/2025", "CUSTOMER": "Shannon Phillips", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/8/2025", "CUSTOMER": "Elizabeth Mcguire", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/9/2025", "CUSTOMER": "Brian Barrett", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/10/2025", "CUSTOMER": "Michael Velez", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/10/2025", "CUSTOMER": "Patricia Hernandez", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/10/2025", "CUSTOMER": "Amanda Meadows", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/11/2025", "CUSTOMER": "Stacey Cunningham", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/11/2025", "CUSTOMER": "John Williams", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/12/2025", "CUSTOMER": "Courtney Fuller", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/12/2025", "CUSTOMER": "Vincent Green", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/13/2025", "CUSTOMER": "Jessica Welch", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/13/2025", "CUSTOMER": "Louis Travis", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/15/2025", "CUSTOMER": "David Gibson", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/15/2025", "CUSTOMER": "Mr. Robert Haney Jr.", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/16/2025", "CUSTOMER": "Chad Jensen", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/17/2025", "CUSTOMER": "Benjamin Morgan", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/17/2025", "CUSTOMER": "Hannah Anderson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/17/2025", "CUSTOMER": "Megan Moses", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/18/2025", "CUSTOMER": "Craig Morales", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/18/2025", "CUSTOMER": "Phillip Gray", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/19/2025", "CUSTOMER": "Michelle Williams", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/19/2025", "CUSTOMER": "Dwayne Williams", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/20/2025", "CUSTOMER": "Mr. Nicholas Murphy", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/20/2025", "CUSTOMER": "Shirley Jones", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/20/2025", "CUSTOMER": "Christopher Turner", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/21/2025", "CUSTOMER": "Tiffany Baker", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/21/2025", "CUSTOMER": "Michael Patel", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/21/2025", "CUSTOMER": "Andrew Young", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/22/2025", "CUSTOMER": "Norma Wood", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/22/2025", "CUSTOMER": "Brett Gonzalez", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/24/2025", "CUSTOMER": "Jaime Miller", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/24/2025", "CUSTOMER": "Jeffrey Nelson", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/24/2025", "CUSTOMER": "Edward Turner", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/25/2025", "CUSTOMER": "John Rios", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/25/2025", "CUSTOMER": "Robert Contreras", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/26/2025", "CUSTOMER": "Amy Bailey", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "4/27/2025", "CUSTOMER": "Alexander Patterson", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "4/30/2025", "CUSTOMER": "Peggy Olson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/1/2025", "CUSTOMER": "Alex Miller", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/1/2025", "CUSTOMER": "Andrew Clarke", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/1/2025", "CUSTOMER": "Susan Cole", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/1/2025", "CUSTOMER": "Kelly Kennedy", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/2/2025", "CUSTOMER": "John Reynolds", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/2/2025", "CUSTOMER": "Judith Johnson", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/2/2025", "CUSTOMER": "Michelle Graham MD", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/2/2025", "CUSTOMER": "Judith Snow", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/2/2025", "CUSTOMER": "Seth James", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/2/2025", "CUSTOMER": "Anthony Price", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/4/2025", "CUSTOMER": "Mrs. Pamela Sharp", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/4/2025", "CUSTOMER": "James Ashley", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/4/2025", "CUSTOMER": "Lisa Mcgee", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/4/2025", "CUSTOMER": "Joseph Yu", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/5/2025", "CUSTOMER": "John Sheppard", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/5/2025", "CUSTOMER": "Stacey Moore", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/5/2025", "CUSTOMER": "Justin Cohen", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/6/2025", "CUSTOMER": "John Manning", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/6/2025", "CUSTOMER": "Victor Murray", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/6/2025", "CUSTOMER": "Devin Perkins", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/6/2025", "CUSTOMER": "Joshua Cochran", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/7/2025", "CUSTOMER": "Joel Evans", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/7/2025", "CUSTOMER": "Sue Martinez", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/7/2025", "CUSTOMER": "Elizabeth Hampton DDS", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/8/2025", "CUSTOMER": "Allison Sawyer", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/8/2025", "CUSTOMER": "David Burton", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/8/2025", "CUSTOMER": "Eric Clark", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/9/2025", "CUSTOMER": "Amy Hester", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/9/2025", "CUSTOMER": "Kimberly Davis", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/9/2025", "CUSTOMER": "Emily Mcgee", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/9/2025", "CUSTOMER": "Megan Johnson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/9/2025", "CUSTOMER": "Lauren Williams", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/9/2025", "CUSTOMER": "Steven Alvarez", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/10/2025", "CUSTOMER": "Gary Bauer", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/10/2025", "CUSTOMER": "Barry Carson", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/10/2025", "CUSTOMER": "Maurice Robles", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/10/2025", "CUSTOMER": "Linda Snyder", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/10/2025", "CUSTOMER": "Edward Barrett DDS", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/11/2025", "CUSTOMER": "Emily Thornton", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/11/2025", "CUSTOMER": "Albert Wolfe", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/12/2025", "CUSTOMER": "Ryan Chapman", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/12/2025", "CUSTOMER": "Peter Rodriguez", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/12/2025", "CUSTOMER": "Donna Torres", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/13/2025", "CUSTOMER": "Ryan Ho", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/13/2025", "CUSTOMER": "John Cook", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/13/2025", "CUSTOMER": "Bridget Patterson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/13/2025", "CUSTOMER": "Christopher Ramos", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/13/2025", "CUSTOMER": "Max Wilkerson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/13/2025", "CUSTOMER": "Sydney Wade", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/14/2025", "CUSTOMER": "Charlene Jackson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/15/2025", "CUSTOMER": "Charles Short", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/16/2025", "CUSTOMER": "Matthew Mora", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/16/2025", "CUSTOMER": "Jacob Smith", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/16/2025", "CUSTOMER": "Justin Wheeler", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/17/2025", "CUSTOMER": "Thomas Fuller", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/17/2025", "CUSTOMER": "Barry Hicks", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/17/2025", "CUSTOMER": "Jean Banks", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/17/2025", "CUSTOMER": "Amanda Rosario", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/18/2025", "CUSTOMER": "Patrick Conway", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/18/2025", "CUSTOMER": "Brandon Douglas", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/19/2025", "CUSTOMER": "Mr. Jonathan Merritt", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/20/2025", "CUSTOMER": "Cynthia Carroll", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/20/2025", "CUSTOMER": "Charles Long", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/20/2025", "CUSTOMER": "Eugene Duke", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/21/2025", "CUSTOMER": "George Krause", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/21/2025", "CUSTOMER": "Heidi Shaffer", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/21/2025", "CUSTOMER": "Christopher Moore", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/21/2025", "CUSTOMER": "Kelsey Contreras", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/22/2025", "CUSTOMER": "Kevin Shannon", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/22/2025", "CUSTOMER": "Jonathan Burton", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/23/2025", "CUSTOMER": "Sherri Lewis", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/23/2025", "CUSTOMER": "Melissa Martinez", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/23/2025", "CUSTOMER": "Brian Berry", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/24/2025", "CUSTOMER": "Scott Johnson", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/25/2025", "CUSTOMER": "Joseph Young", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/25/2025", "CUSTOMER": "Jose Gibson", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/25/2025", "CUSTOMER": "Jacqueline Riley", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/27/2025", "CUSTOMER": "Lawrence Dennis", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/27/2025", "CUSTOMER": "Stephen Walsh", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/27/2025", "CUSTOMER": "Steven Perez", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/27/2025", "CUSTOMER": "Michael Dillon", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/28/2025", "CUSTOMER": "Bridget Doyle", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/28/2025", "CUSTOMER": "Samuel Marquez", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "5/28/2025", "CUSTOMER": "Julian Edwards", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/28/2025", "CUSTOMER": "Theresa Jacobs", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/28/2025", "CUSTOMER": "Brittney Mcdonald", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/28/2025", "CUSTOMER": "Dr. Eric Brown", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/29/2025", "CUSTOMER": "Steven Garcia", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/29/2025", "CUSTOMER": "Edward Graham", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/29/2025", "CUSTOMER": "Elizabeth West", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "5/30/2025", "CUSTOMER": "Melanie Marshall", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "5/31/2025", "CUSTOMER": "Stephen Lynch", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "5/31/2025", "CUSTOMER": "Travis Frederick", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/1/2025", "CUSTOMER": "Alexandra Williams", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/1/2025", "CUSTOMER": "Danielle Richard PhD", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/2/2025", "CUSTOMER": "Katherine Soto", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/2/2025", "CUSTOMER": "Jacqueline Jackson", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/2/2025", "CUSTOMER": "Chelsea Brady", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/3/2025", "CUSTOMER": "Peter Williams", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/3/2025", "CUSTOMER": "Amber Brown", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/3/2025", "CUSTOMER": "Stephanie Wiggins", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/3/2025", "CUSTOMER": "Donald Collins", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/4/2025", "CUSTOMER": "Pamela Thornton", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/4/2025", "CUSTOMER": "Brittany Hayes", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/5/2025", "CUSTOMER": "David Williams", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/5/2025", "CUSTOMER": "Christopher Fletcher", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/6/2025", "CUSTOMER": "Andrew Briggs", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/6/2025", "CUSTOMER": "Thomas Martin", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/6/2025", "CUSTOMER": "Shaun Duncan", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/7/2025", "CUSTOMER": "Carrie Benjamin", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/7/2025", "CUSTOMER": "Dr. Kendra Adams", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/7/2025", "CUSTOMER": "Michael Taylor", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/7/2025", "CUSTOMER": "Crystal Smith", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/7/2025", "CUSTOMER": "Dana Johnson", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "6/9/2025", "CUSTOMER": "Andrew Rivera", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/9/2025", "CUSTOMER": "Kaylee Rodriguez", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/10/2025", "CUSTOMER": "Alice Pierce", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/10/2025", "CUSTOMER": "Richard Peterson", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/10/2025", "CUSTOMER": "Cynthia Fernandez", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/10/2025", "CUSTOMER": "Ashley Kaiser", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/11/2025", "CUSTOMER": "Joseph Anderson", "PRODUCT": "5 Accounts", "TOTAL RECIEVED": "$5,000.00"}, {"DATE": "6/11/2025", "CUSTOMER": "Michael Tran", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/11/2025", "CUSTOMER": "Ronald Flynn", "PRODUCT": "10 Accounts", "TOTAL RECIEVED": "$10,000.00"}, {"DATE": "6/11/2025", "CUSTOMER": "Deborah Adams DVM", "PRODUCT": "20 Accounts", "TOTAL RECIEVED": "$16,000.00"}, {"DATE": "6/12/2025", "CUSTOMER": "Brooke Pineda", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}, {"DATE": "6/12/2025", "CUSTOMER": "Amy Cox", "PRODUCT": "1 Account", "TOTAL RECIEVED": "$1,000.00"}];
+
+  function parseUSD(s) {
+    if (!s) return 0;
+    return parseFloat(String(s).replace(/[$,]/g, "")) || 0;
+  }
+
+  function fmtUSD(n) {
+    return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function monthFromDateStr(mdy) {
+    // m/d/yyyy
+    const parts = String(mdy).split("/");
+    return parseInt(parts[0], 10);
+  }
+
+  function filterData(month, query) {
+    let rows = DATA.slice();
+    if (month) rows = rows.filter(r => monthFromDateStr(r.DATE) === parseInt(month, 10));
+    if (query) {
+      const q = query.toLowerCase();
+      rows = rows.filter(r => String(r.CUSTOMER).toLowerCase().includes(q) || String(r.PRODUCT).toLowerCase().includes(q));
+    }
+    return rows;
+  }
+
+  function computeStats(rows) {
+    const totalCustomers = rows.length;
+    const totalCash = rows.reduce((acc, r) => acc + parseUSD(r["TOTAL RECIEVED"]), 0);
+    return { totalCustomers, totalCash };
+  }
+
+  function renderTable(rows) {
+    const tbody = document.querySelector("#dataTable tbody");
+    tbody.innerHTML = "";
+    const frag = document.createDocumentFragment();
+    rows.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.DATE}</td>
+        <td>${r.CUSTOMER}</td>
+        <td>${r.PRODUCT}</td>
+        <td class="right">$${fmtUSD(parseUSD(r["TOTAL RECIEVED"]))}</td>
+      `;
+      frag.appendChild(tr);
+    });
+    tbody.appendChild(frag);
+  }
+
+  function updateUI(month, query) {
+    const rows = filterData(month, query);
+    renderTable(rows);
+    const stats = computeStats(rows);
+    document.getElementById("totalCustomers").textContent = stats.totalCustomers.toLocaleString();
+    document.getElementById("totalCash").textContent = "$" + fmtUSD(stats.totalCash);
+    const title = document.getElementById("tableTitle");
+    const summary = document.getElementById("tableSummary");
+    if (!month) {
+      title.textContent = "All Transactions";
+      summary.textContent = "";
+    } else {
+      const monthNames = {1:"January",2:"February",3:"March",4:"April",5:"May",6:"June"};
+      title.textContent = monthNames[parseInt(month,10)] + " Transactions";
+      summary.textContent = stats.totalCustomers.toLocaleString() + " sales • $" + fmtUSD(stats.totalCash);
+    }
+  }
+
+  const monthSelect = document.getElementById("monthSelect");
+  const search = document.getElementById("search");
+  monthSelect.addEventListener("change", () => updateUI(monthSelect.value, search.value));
+  search.addEventListener("input", () => updateUI(monthSelect.value, search.value));
+
+  // Initial render (overview)
+  updateUI("", "");
+</script>
+</body>
+</html>
